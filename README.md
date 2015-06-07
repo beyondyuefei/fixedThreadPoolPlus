@@ -7,7 +7,9 @@
 Exception in thread "main" java.util.concurrent.RejectedExecutionException: Thread pool is EXHAUSTED! Thread Name: test-thredpool-plus, Pool Size: 10 (active: 10, core: 10, max: 10, largest: 10), Task: 10 (completed: 0), Executor status:(isShutdown:false, isTerminated:false, isTerminating:false)
 
 6 threads are hanging on this code : 	at java.net.PlainSocketImpl.socketConnect(Native Method)
+
 4 threads are hanging on this code : 	at java.lang.Thread.sleep(Native Method)
+
 You can fetch more thread statck information by the detail file : /Users/yuekuo/test-thredpool-plus.detail
 
 测试代码请参加wiki中的demo
