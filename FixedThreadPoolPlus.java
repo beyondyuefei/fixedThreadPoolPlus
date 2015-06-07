@@ -5,8 +5,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -33,7 +31,8 @@ public class FixedThreadPoolPlus {
      * @param nThreads 线程个数
      * @param queues 允许缓冲在队列中的任务数 (0:不缓冲、负数：无限大、正数：缓冲的任务数)
      * @param threadName 该线程组中线程的命
-     * @param processNameMatch 应用的java进程名,支持模糊匹配 (当机器上跑多个java进程时，只打印出指定进程的线程堆栈,你可用通过 jps -l 命令找出你java应用的进程名)
+     * @param processNameMatch 应用的java进程名,支持模糊匹配
+     *            (当机器上跑多个java进程时，只打印出指定进程的线程堆栈,你可用通过 jps -l 命令找出你java应用的进程名)
      * @return Executor
      */
     public static Executor newFixedThreadPools(final int nThreads, final int queues,
@@ -129,7 +128,8 @@ public class FixedThreadPoolPlus {
                                 + entry.getKey() + "\n";
                     }
 
-                    msg = msg + "You can fetch more thread statck information by the detail file : "
+                    msg = msg
+                            + "You can fetch more thread statck information by the detail file : "
                             + fileName + "\n";
                     throw new RejectedExecutionException(msg);
                 } catch (IOException e) {
@@ -189,51 +189,4 @@ public class FixedThreadPoolPlus {
 
     }
 
-    // test
-    public static void main(String[] args) throws Exception {
-        //共10个线程资源，且没有缓冲队列，方便直接报错
-        Executor ex = FixedThreadPoolPlus.newFixedThreadPools(10, 0, "test-thredpool-plus",
-                "FixedThreadPoolPlus");
-        // 4
-        for (int i = 0; i < 4; i++) {
-            ex.execute(new Runnable() {
-                @Override
-                public void run() {
-                    while (true) {
-                        try {
-                            Thread.sleep(5000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            });
-        }
-
-        // waiting for threadpool overflow ...
-        for (int i = 4; i < 20; i++) {
-            ex.execute(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        while (true) {
-                            URL url = new URL("http://121.121.121.121");
-                            HttpURLConnection httpUrlConnection = (HttpURLConnection) url
-                                    .openConnection();
-                            httpUrlConnection.setRequestMethod("GET");
-                            httpUrlConnection.setDoInput(true);
-                            httpUrlConnection.setConnectTimeout(3000);
-                            httpUrlConnection.setReadTimeout(3000);
-
-                            if (httpUrlConnection.getResponseCode() != HttpURLConnection.HTTP_OK) {
-
-                            }
-                        }
-                    } catch (Exception e) {
-                        //ignore
-                    }
-                }
-            });
-        }
-    }
 }
